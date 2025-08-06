@@ -19,22 +19,6 @@ class NFeProcessor:
         self.master.title("Processador de NF-e")
         self.master.minsize(600, 400)
 
-        try:
-            self.master.iconbitmap('./tiopatinha.ico')
-        except:
-            pass
-
-        # Por esta versão mais robusta:
-        try:
-            import sys
-            import os
-            # Obtém o caminho base do executável (funciona mesmo quando convertido para .exe)
-            base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-            icon_path = os.path.join(base_path, 'tiopatinha.ico')
-            self.master.iconbitmap(icon_path)
-        except Exception as e:
-            print(f"Não foi possível carregar o ícone: {str(e)}")
-
         # Variáveis
         self.arquivos_selecionados = []
         self.ns = {'ns': 'http://www.portalfiscal.inf.br/nfe'}
