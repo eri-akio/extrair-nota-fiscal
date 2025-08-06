@@ -20,11 +20,11 @@ def processar_xml(arquivo_xml):
         
         return {
             'emitente': root.xpath('//ns:emit/ns:xNome/text()', namespaces=ns)[0],
-            'valor': f"R$ {float(root.xpath('//ns:total/ns:ICMSTot/ns:vNF/text()', namespaces=ns)[0]):.2f}".replace('.', ','),
             'vencimento': datetime.strptime(
                 root.xpath('//ns:cobr/ns:dup/ns:dVenc/text()', namespaces=ns)[0], 
                 "%Y-%m-%d"
-            ).strftime("%d/%m/%Y")
+            ).strftime("%d/%m/%Y"),
+            'valor': f"R$ {float(root.xpath('//ns:total/ns:ICMSTot/ns:vNF/text()', namespaces=ns)[0]):.2f}".replace('.', ',')
         }
     except Exception as e:
         print(f"Erro ao processar {arquivo_xml}: {str(e)}")
@@ -36,11 +36,11 @@ ws = wb.active
 ws.title = "NF-e"
 
 # Cabeçalhos
-cabecalhos = ["Nº", "Emitente", "Valor", "Vencimento"]
+cabecalhos = ["Emitente", "Vencimento", "Valor"]
 ws.append(cabecalhos)
 
 # Formatar cabeçalhos
-for col in range(1, 6):
+for col in range(1, 5):
     ws.cell(row=1, column=col).font = Font(bold=True)
 
 # Processar XMLs
@@ -48,10 +48,9 @@ for idx, arquivo in enumerate([f for f in os.listdir(diretorio_xml) if f.lower()
     dados = processar_xml(os.path.join(diretorio_xml, arquivo))
     if dados:
         ws.append([
-            idx,
             dados['emitente'],
-            dados['valor'],
-            dados['vencimento']
+            dados['vencimento'],
+            dados['valor']
         ])
 
 # Ajuste automático das colunas
